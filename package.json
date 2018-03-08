@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^2.3.2",
     "mocha": "^5.0.4",
     "yamljs": "^0.3.0"
   }

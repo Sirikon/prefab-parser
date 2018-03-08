@@ -1,5 +1,6 @@
 const yaml = require('yamljs');
 const fs = require('fs');
+const chalk = require('chalk');
 
 const { IDsToString } = require('./src/idsToString');
 
@@ -47,6 +48,25 @@ function getGameObject(info, id) {
     return { id, name, components, children }
 }
 
+function space(size) {
+    return "".padStart(size)
+}
+
+function printGameObject(gameObject, spacing) {
+    var s = spacing || 0;
+    console.log(space(s) + chalk.magenta(gameObject.name));
+    console.log(space(s + 1) + chalk.grey('Components: '));
+    gameObject.components.forEach(c => {
+        console.log(space(s+2) + chalk.cyan('- ' + c.type));
+    })
+    if (gameObject.children.length) {
+        console.log(space(s + 1) + chalk.grey('Children: '));
+        gameObject.children.forEach(c => {
+            printGameObject(c, s + 2);
+        })
+    }
+}
+
 var data = fs.readFileSync('./data/Test.prefab', { encoding: 'utf8' });
 
 data = data.replace(/\r/g, '');
@@ -84,6 +104,6 @@ var prefab = Object.keys(info).filter((k) => {
 
 final = getGameObject(info, prefab.m_RootGameObject.fileID.toString());
 
-console.log(JSON.stringify(final, null, 2));
+printGameObject(final);
 
 // fs.writeFileSync('./info.json', JSON.stringify(info, null, 4));
